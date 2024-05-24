@@ -119,7 +119,18 @@ val_dataloader = dict(
             img_path='JPEGImages', seg_map_path='SegmentationClass'),
         ann_file='ImageSets/Segmentation/val.txt',
         pipeline=test_pipeline))
-test_dataloader = val_dataloader
+test_dataloader = dict(
+    batch_size=1,
+    num_workers=4,
+    persistent_workers=True,
+    sampler=dict(type='DefaultSampler', shuffle=False),
+    dataset=dict(
+        type=dataset_type,
+        data_root='/content/data/test_data/syntagen_test',
+        data_prefix=dict(
+            img_path='image', seg_map_path='mask'),
+        ann_file='test.txt',
+        pipeline=test_pipeline))
 
 val_evaluator = dict(type='IoUMetric', iou_metrics=['mIoU'])
 test_evaluator = val_evaluator
